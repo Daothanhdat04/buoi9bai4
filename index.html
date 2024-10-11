@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation with Date of Birth</title>
+    <style>
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h2>Đăng ký</h2>
+    <form id="registerForm" onsubmit="return validateForm()">
+        <label for="lastName">Họ:</label>
+        <input type="text" id="lastName" name="lastName"><br><br>
+
+        <label for="firstName">Tên:</label>
+        <input type="text" id="firstName" name="firstName"><br><br>
+
+        <label for="dob">Ngày sinh:</label>
+        <select id="day" name="day">
+            <option value="">Ngày</option>
+            <!-- Tạo các giá trị từ 1 đến 31 -->
+            <script>
+                for (let i = 1; i <= 31; i++) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select>
+
+        <select id="month" name="month">
+            <option value="">Tháng</option>
+            <!-- Tạo các giá trị từ 1 đến 12 -->
+            <script>
+                for (let i = 1; i <= 12; i++) {
+                    document.write(`<option value="${i}">Tháng ${i}</option>`);
+                }
+            </script>
+        </select>
+
+        <select id="year" name="year">
+            <option value="">Năm</option>
+            <!-- Tạo các giá trị từ 1900 đến năm hiện tại -->
+            <script>
+                const currentYear = new Date().getFullYear();
+                for (let i = currentYear; i >= 1900; i--) {
+                    document.write(`<option value="${i}">${i}</option>`);
+                }
+            </script>
+        </select>
+        <br><br>
+
+        <label for="gender">Giới tính:</label>
+        <select id="gender" name="gender">
+            <option value="">Chọn giới tính</option>
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
+            <option value="other">Khác</option>
+        </select><br><br>
+
+        <label for="phone">Số điện thoại:</label>
+        <input type="text" id="phone" name="phone"><br><br>
+
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"><br><br>
+
+        <label for="password">Mật khẩu:</label>
+        <input type="password" id="password" name="password"><br><br>
+
+        <label for="confirmPassword">Xác nhận mật khẩu:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword"><br><br>
+        
+        <label for="khac">Khác:</label>
+        <input type="khac" id="khac" name="khac"><br><br>
+
+
+        <button type="submit">Submit</button>
+        <button type="submit">Reset</button>
+    </form>
+
+    <p id="error-message" class="error"></p>
+
+    <script>
+        function validateForm() {
+            // Lấy các giá trị từ form
+            var lastName = document.getElementById("lastName").value;
+            var firstName = document.getElementById("firstName").value;
+            var day = document.getElementById("day").value;
+            var month = document.getElementById("month").value;
+            var year = document.getElementById("year").value;
+            var gender = document.getElementById("gender").value;
+            var phone = document.getElementById("phone").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var errorMessage = document.getElementById("error-message");
+
+            // Xóa thông báo lỗi
+            errorMessage.innerHTML = "";
+
+            // Kiểm tra Họ tên không được để trống
+            if (lastName.trim() === "" || firstName.trim() === "") {
+                errorMessage.innerHTML = "Họ và Tên không được để trống!";
+                return false;
+            }
+
+            // Kiểm tra ngày sinh (Ngày, tháng, năm phải được chọn)
+            if (day === "" || month === "" || year === "") {
+                errorMessage.innerHTML = "Ngày sinh không được để trống!";
+                return false;
+            }
+
+            // Kiểm tra giới tính có được chọn không
+            if (gender === "") {
+                errorMessage.innerHTML = "Vui lòng chọn giới tính!";
+                return false;
+            }
+
+            // Kiểm tra số điện thoại hợp lệ (tối thiểu 10 chữ số)
+            var phonePattern = /^[0-9]{10,}$/;
+            if (!phone.match(phonePattern)) {
+                errorMessage.innerHTML = "Số điện thoại không hợp lệ! Phải có ít nhất 10 chữ số.";
+                return false;
+            }
+
+            // Kiểm tra định dạng email
+            var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!email.match(emailPattern)) {
+                errorMessage.innerHTML = "Email không hợp lệ!";
+                return false;
+            }
+
+            // Kiểm tra độ dài mật khẩu (ít nhất 6 ký tự)
+            if (password.length < 6) {
+                errorMessage.innerHTML = "Mật khẩu phải có ít nhất 6 ký tự!";
+                return false;
+            }
+
+            // Kiểm tra xác nhận mật khẩu có khớp với mật khẩu không
+            if (password !== confirmPassword) {
+                errorMessage.innerHTML = "Mật khẩu xác nhận không khớp!";
+                return false;
+            }
+
+            // Nếu không có lỗi, form hợp lệ
+            return true;
+        }
+    </script>
+</body>
+</html>
